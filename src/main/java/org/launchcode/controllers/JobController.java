@@ -1,5 +1,6 @@
 package org.launchcode.controllers;
 
+import org.launchcode.models.*;
 import org.launchcode.models.forms.JobForm;
 import org.launchcode.models.data.JobData;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,10 @@ public class JobController {
 
         // TODO #1 - get the Job with the given ID and pass it into the view
 
+        Job job = jobData.findById(id);
+
+        model.addAttribute("job", job);
+
         return "job-detail";
     }
 
@@ -41,7 +46,36 @@ public class JobController {
         // new Job and add it to the jobData data store. Then
         // redirect to the job detail view for the new Job.
 
-        return "";
+        if (errors.hasErrors()) {
+            //use same jobForm so will retain current values:
+            model.addAttribute("jobForm", jobForm);
+            return "new-job";
+        }
+
+        // create new job:
+        String myName = jobForm.getName();
+        // ^ name that came from template
+
+        Employer myEmployer = jobForm.getEmpById(jobForm.getEmployerId());
+        // ^ plug myEmployer into the constructor. Use the helper method
+        // jobForm.getEmpById and the "getter" method jobForm.getEmployerId()
+        // to get the ID. Then do the same for the other 3 cases:
+        Location myLocation = jobForm.getLocById(jobForm.getLocationId());
+        PositionType myPosition = jobForm.getPosById(jobForm.getPositionId());
+        CoreCompetency myCompetency = jobForm.getCompById(jobForm.getCompetencyId());
+
+        // use constructor to create a new job:
+        Job newJob = new Job(myName, myEmployer, myLocation, myPosition, myCompetency);
+
+        // add new Job to the list of existing ones, using global variable jobData:
+        jobData.add(newJob);
+
+        return "redirect:/job" + "?id=" + newJob.getId();
+        // ^ dont need to convert int to string here b/c java does it for you
+
+
+        // old return statement:
+        //return "";
 
     }
 }

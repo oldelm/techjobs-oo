@@ -28,6 +28,14 @@ public class JobForm {
         Don't forget to add getters and setters
      */
 
+
+    @NotNull
+    private int locationId;
+    @NotNull
+    private int competencyId;
+    @NotNull
+    private int positionId;
+
     private ArrayList<Employer> employers;
     private ArrayList<Location> locations;
     private ArrayList<CoreCompetency> coreCompetencies;
@@ -41,9 +49,40 @@ public class JobForm {
             TODO #4 - populate the other ArrayList collections needed in the view
         */
 
+
+        positionTypes = jobData.getPositionTypes().findAll();
+        coreCompetencies = jobData.getCoreCompetencies().findAll();
+        locations = jobData.getLocations().findAll();
+
         employers = jobData.getEmployers().findAll();
 
     }
+
+    // add geters and setters
+    public int getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(int locationId) {
+        this.locationId = locationId;
+    }
+
+    public int getCompetencyId() {
+        return competencyId;
+    }
+
+    public void setCompetencyId(int competencyId) {
+        this.competencyId = competencyId;
+    }
+
+    public int getPositionId() {
+        return positionId;
+    }
+
+    public void setPositionId(int positionId) {
+        this.positionId = positionId;
+    }
+
 
     public String getName() {
         return name;
@@ -92,4 +131,41 @@ public class JobForm {
     public void setPositionTypes(ArrayList<PositionType> positionTypes) {
         this.positionTypes = positionTypes;
     }
+
+
+
+    // helpers for to do 6:
+
+    public Employer getEmpById(int id){
+        for (Employer emp : employers){
+            if (emp.getId() == id)
+                return emp;
+        }
+        return null;
+    }
+    public Location getLocById(int id){
+        for (Location loc : locations){
+            if (loc.getId() == id)
+                return loc;
+        }
+        return null;
+    }
+    public PositionType getPosById(int id){
+        for (PositionType pos : positionTypes){
+            if (pos.getId() == id)
+                return pos;
+        }
+        return null;
+    }
+
+    public CoreCompetency getCompById(int id){
+        for (CoreCompetency comp : coreCompetencies){
+            if (comp.getId() == id)
+                return comp;
+        }
+        return null;
+    }
+
+
+
 }
